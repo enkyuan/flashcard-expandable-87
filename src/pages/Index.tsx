@@ -6,40 +6,88 @@ import FlashcardNavigation from '@/components/FlashcardNavigation';
 import FlashcardSidebar from '@/components/FlashcardSidebar';
 import OfflineNotice from '@/components/OfflineNotice';
 import { toast } from '@/components/ui/use-toast';
+import { FlashcardData, Card } from '@/types/flashcard';
 
-// Mock data
-const flashcards = [
-  {
-    id: 1,
-    question: "lol",
-    answer: "laugh out loud",
-    tags: ["acronym", "slang"],
+// Card data from the provided JSON
+const flashcardData: FlashcardData = {
+  "deck": {
+    "title": "Principles of Macroeconomics",
+    "description": "Covers fundamental macroeconomic mechanisms including inflation protection, policy tradeoffs, economic measurement, and trade dynamics. Focuses on atomic concepts through 12 carefully sequenced cards that emphasize: (1) Inflation-indexed wage adjustments (COLAs), (2) Opportunity cost analysis of monetary policy, (3) GDP as an economic scoreboard, and (4) Unintended consequences of protectionism. Designed for active recall of irreducible economic principles using real-world applications."
   },
-  {
-    id: 2,
-    question: "What is the capital of France?",
-    answer: "Paris",
-    tags: ["geography", "europe"],
-  },
-  {
-    id: 3,
-    question: "Who wrote 'Pride and Prejudice'?",
-    answer: "Jane Austen",
-    tags: ["literature", "books"],
-  },
-  {
-    id: 4,
-    question: "What is the chemical symbol for gold?",
-    answer: "Au (from Latin 'aurum')",
-    tags: ["chemistry", "elements"],
-  },
-  {
-    id: 5,
-    question: "In what year did World War II end?",
-    answer: "1945",
-    tags: ["history", "war"],
-  },
-];
+  "cards": [
+    {
+      "front": "What does COLA stand for in wage contracts?",
+      "back": "Cost-of-Living Adjustment",
+      "interval": 1
+    },
+    {
+      "front": "What economic indicator directly triggers COLA wage adjustments?",
+      "back": "Inflation rates",
+      "interval": 3
+    },
+    {
+      "front": "How do COLAs protect workers during inflationary periods?",
+      "back": "By automatically increasing nominal wages to match price increases",
+      "interval": 7
+    },
+    {
+      "front": "What immediate household expense increases when the Fed raises rates to combat inflation?",
+      "back": "Mortgage interest rates",
+      "interval": 14
+    },
+    {
+      "front": "What personal finance opportunity is lost when mortgage rates rise?",
+      "back": "Affordable home purchases or refinancing options",
+      "interval": 21
+    },
+    {
+      "front": "What trade-off exists between Fed rate hikes and consumer spending?",
+      "back": "Higher rates curb inflation but reduce disposable income",
+      "interval": 30
+    },
+    {
+      "front": "What does GDP measure in simplest terms?",
+      "back": "Total value of goods/services produced in a country annually",
+      "interval": 45
+    },
+    {
+      "front": "GDP analogy: What everyday object represents economic tracking?",
+      "back": "A scoreboard tracking national economic activity",
+      "interval": 60
+    },
+    {
+      "front": "What two key elements define GDP calculations?",
+      "back": "Final goods/services produced within borders + time period (usually annual)",
+      "interval": 90
+    },
+    {
+      "front": "First-order effect of protective tariffs on domestic industries?",
+      "back": "Increased production costs for imported raw materials",
+      "interval": 120
+    },
+    {
+      "front": "How do tariffs reduce export competitiveness?",
+      "back": "Through retaliatory tariffs from trading partners",
+      "interval": 180
+    },
+    {
+      "front": "What happens to consumer spending when tariffs raise prices?",
+      "back": "Money shifts to protected sectors, starving other industries",
+      "interval": 365
+    }
+  ]
+};
+
+// Add interval information to the cards
+const cardsWithIntervals = flashcardData.cards.map(card => {
+  const now = new Date();
+  const dueDate = new Date();
+  dueDate.setDate(now.getDate() + (card.interval || 1));
+  return {
+    ...card,
+    dueDate
+  };
+});
 
 const Index = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -48,13 +96,13 @@ const Index = () => {
   const [cardOpacity, setCardOpacity] = useState(1);
   const [isCardExpanded, setIsCardExpanded] = useState(false);
 
-  const currentCard = flashcards[currentCardIndex];
+  const currentCard = cardsWithIntervals[currentCardIndex];
 
   const handleNextCard = () => {
     // Animate card transition
     setCardOpacity(0);
     setTimeout(() => {
-      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % flashcards.length);
+      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardsWithIntervals.length);
       setCardOpacity(1);
       setIsCardExpanded(false);
     }, 300);
@@ -65,7 +113,7 @@ const Index = () => {
     setCardOpacity(0);
     setTimeout(() => {
       setCurrentCardIndex((prevIndex) => 
-        prevIndex === 0 ? flashcards.length - 1 : prevIndex - 1
+        prevIndex === 0 ? cardsWithIntervals.length - 1 : prevIndex - 1
       );
       setCardOpacity(1);
       setIsCardExpanded(false);
@@ -75,7 +123,7 @@ const Index = () => {
   const handleAddToReviews = () => {
     toast({
       title: "Added to Reviews",
-      description: `Card "${currentCard.question}" has been added to your reviews.`,
+      description: `Card "${currentCard.front}" has been added to your reviews.`,
       duration: 3000,
     });
     handleNextCard();
@@ -128,8 +176,8 @@ const Index = () => {
       {/* Header */}
       <FlashcardHeader 
         onOpenSidebar={() => setIsSidebarOpen(true)}
-        deckName="Flashcards"
-        cardCount={flashcards.length}
+        deckName={flashcardData.deck.title}
+        cardCount={cardsWithIntervals.length}
         currentIndex={currentCardIndex + 1}
       />
 
@@ -137,6 +185,8 @@ const Index = () => {
       <FlashcardSidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)}
+        deckTitle={flashcardData.deck.title}
+        deckDescription={flashcardData.deck.description}
       />
 
       {/* Main Content */}
@@ -146,9 +196,10 @@ const Index = () => {
           style={{ opacity: cardOpacity }}
         >
           <Flashcard
-            question={currentCard.question}
-            answer={currentCard.answer}
-            tags={currentCard.tags}
+            question={currentCard.front}
+            answer={currentCard.back}
+            interval={currentCard.interval}
+            dueDate={currentCard.dueDate}
             onNextCard={handleNextCard}
           />
         </div>
@@ -160,6 +211,8 @@ const Index = () => {
         onNext={handleNextCard}
         onReview={handleAddToReviews}
         onSkip={handleNextCard}
+        interval={currentCard.interval}
+        dueDate={currentCard.dueDate}
       />
 
       {/* Offline Notice */}

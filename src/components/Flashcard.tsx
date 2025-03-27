@@ -10,10 +10,12 @@ export interface FlashcardProps {
   question: string;
   answer: string;
   tags?: string[];
+  interval?: number;
+  dueDate?: Date;
   onNextCard?: () => void;
 }
 
-const Flashcard = ({ question, answer, tags = [], onNextCard }: FlashcardProps) => {
+const Flashcard = ({ question, answer, tags = [], interval, dueDate, onNextCard }: FlashcardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpand = () => {

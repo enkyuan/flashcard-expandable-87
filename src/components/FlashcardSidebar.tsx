@@ -6,9 +6,11 @@ import { X } from 'lucide-react';
 interface FlashcardSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  deckTitle?: string;
+  deckDescription?: string;
 }
 
-const FlashcardSidebar = ({ isOpen, onClose }: FlashcardSidebarProps) => {
+const FlashcardSidebar = ({ isOpen, onClose, deckTitle, deckDescription }: FlashcardSidebarProps) => {
   return (
     <>
       {/* Sidebar Overlay */}
@@ -21,7 +23,7 @@ const FlashcardSidebar = ({ isOpen, onClose }: FlashcardSidebarProps) => {
       
       {/* Sidebar */}
       <div 
-        className={`fixed top-0 left-0 bottom-0 w-64 bg-white border-r border-gray-200 z-50 transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 left-0 bottom-0 w-80 bg-white border-r border-gray-200 z-50 transform transition-transform duration-300 ease-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -38,15 +40,28 @@ const FlashcardSidebar = ({ isOpen, onClose }: FlashcardSidebarProps) => {
         </div>
         
         <div className="p-4">
-          <Button 
-            variant="outline" 
-            className="w-full justify-start text-gray-700 bg-white border-gray-200 hover:bg-gray-50 transition-colors"
-          >
-            Open sidebar
-          </Button>
+          {deckTitle && (
+            <h2 className="text-lg font-medium text-gray-800 mb-2">{deckTitle}</h2>
+          )}
           
-          <div className="mt-4 text-sm text-gray-500 opacity-70">
-            ⌘+1
+          {deckDescription && (
+            <p className="text-sm text-gray-600 mb-4 leading-relaxed">{deckDescription}</p>
+          )}
+          
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            <Button 
+              variant="outline" 
+              className="w-full justify-start text-gray-700 bg-white border-gray-200 hover:bg-gray-50 transition-colors mb-2"
+            >
+              Open sidebar (⌘+1)
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="w-full justify-start text-gray-700 bg-white border-gray-200 hover:bg-gray-50 transition-colors"
+            >
+              Import cards
+            </Button>
           </div>
         </div>
       </div>
