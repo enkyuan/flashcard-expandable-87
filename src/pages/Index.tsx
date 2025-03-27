@@ -46,6 +46,7 @@ const Index = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOfflineNotice, setShowOfflineNotice] = useState(true);
   const [cardOpacity, setCardOpacity] = useState(1);
+  const [isCardExpanded, setIsCardExpanded] = useState(false);
 
   const currentCard = flashcards[currentCardIndex];
 
@@ -55,6 +56,7 @@ const Index = () => {
     setTimeout(() => {
       setCurrentCardIndex((prevIndex) => (prevIndex + 1) % flashcards.length);
       setCardOpacity(1);
+      setIsCardExpanded(false);
     }, 300);
   };
 
@@ -66,6 +68,7 @@ const Index = () => {
         prevIndex === 0 ? flashcards.length - 1 : prevIndex - 1
       );
       setCardOpacity(1);
+      setIsCardExpanded(false);
     }, 300);
   };
 
@@ -90,10 +93,25 @@ const Index = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
-        handleNextCard();
+        e.preventDefault(); // Prevent page scrolling
+        handleAddToReviews();
       } else if (e.code === 'ArrowLeft') {
         handlePreviousCard();
       } else if (e.code === 'ArrowRight') {
+        handleNextCard();
+      } else if (e.code === 'KeyF') {
+        toast({
+          title: "Review Again",
+          description: "Card has been marked for review again.",
+          duration: 3000,
+        });
+        handleNextCard();
+      } else if (e.code === 'KeyX') {
+        toast({
+          title: "Skipped",
+          description: "Card has been skipped.",
+          duration: 3000,
+        });
         handleNextCard();
       }
     };
@@ -106,7 +124,7 @@ const Index = () => {
   }, [currentCardIndex]);
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-white relative">
+    <div className="min-h-screen bg-gray-50 text-gray-900 relative">
       {/* Header */}
       <FlashcardHeader 
         onOpenSidebar={() => setIsSidebarOpen(true)}
