@@ -1,8 +1,16 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { MenuIcon, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, PanelLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 interface FlashcardHeaderProps {
   onOpenSidebar: () => void;
@@ -27,11 +35,20 @@ const FlashcardHeader = ({
             className="h-9 w-9 rounded-md text-gray-700 hover:bg-gray-100 hover:text-gray-900"
             onClick={onOpenSidebar}
           >
-            <MenuIcon size={18} />
+            <PanelLeft size={18} />
           </Button>
           
-          {/* Use a monospace font for Flashcards text to match the design */}
-          <span className="font-mono text-sm text-gray-900">Flashcards</span>
+          <Breadcrumb className="font-mono text-sm">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/" className="text-gray-700">Decks</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className="text-gray-900">{deckName}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         </div>
         
         <div className="flex items-center space-x-5">
