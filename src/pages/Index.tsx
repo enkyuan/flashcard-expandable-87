@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Flashcard from '@/components/Flashcard';
 import FlashcardHeader from '@/components/FlashcardHeader';
@@ -8,7 +7,6 @@ import OfflineNotice from '@/components/OfflineNotice';
 import { toast } from '@/components/ui/use-toast';
 import { FlashcardData, Card } from '@/types/flashcard';
 
-// Card data from the provided JSON
 const flashcardData: FlashcardData = {
   "deck": {
     "title": "Principles of Macroeconomics",
@@ -78,7 +76,6 @@ const flashcardData: FlashcardData = {
   ]
 };
 
-// Add interval information to the cards
 const cardsWithIntervals = flashcardData.cards.map(card => {
   const now = new Date();
   const dueDate = new Date();
@@ -99,7 +96,6 @@ const Index = () => {
   const currentCard = cardsWithIntervals[currentCardIndex];
 
   const handleNextCard = () => {
-    // Animate card transition
     setCardOpacity(0);
     setTimeout(() => {
       setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardsWithIntervals.length);
@@ -109,7 +105,6 @@ const Index = () => {
   };
 
   const handlePreviousCard = () => {
-    // Animate card transition
     setCardOpacity(0);
     setTimeout(() => {
       setCurrentCardIndex((prevIndex) => 
@@ -137,16 +132,17 @@ const Index = () => {
     });
   };
 
-  // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
-        e.preventDefault(); // Prevent page scrolling
-        handleAddToReviews();
+        e.preventDefault();
+        setIsCardExpanded(!isCardExpanded);
       } else if (e.code === 'ArrowLeft') {
         handlePreviousCard();
       } else if (e.code === 'ArrowRight') {
         handleNextCard();
+      } else if (e.code === 'Enter') {
+        handleAddToReviews();
       } else if (e.code === 'KeyF') {
         toast({
           title: "Review Again",
@@ -169,11 +165,10 @@ const Index = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentCardIndex]);
+  }, [currentCardIndex, isCardExpanded]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 relative">
-      {/* Header */}
       <FlashcardHeader 
         onOpenSidebar={() => setIsSidebarOpen(true)}
         deckName={flashcardData.deck.title}
@@ -181,7 +176,6 @@ const Index = () => {
         currentIndex={currentCardIndex + 1}
       />
 
-      {/* Sidebar */}
       <FlashcardSidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)}
@@ -189,7 +183,6 @@ const Index = () => {
         deckDescription={flashcardData.deck.description}
       />
 
-      {/* Main Content */}
       <div className="pt-16 pb-24 px-4 flex items-center justify-center min-h-screen">
         <div 
           className="w-full max-w-lg transition-opacity duration-300"
@@ -201,11 +194,12 @@ const Index = () => {
             interval={currentCard.interval}
             dueDate={currentCard.dueDate}
             onNextCard={handleNextCard}
+            isExpanded={isCardExpanded}
+            onToggleExpand={() => setIsCardExpanded(!isCardExpanded)}
           />
         </div>
       </div>
 
-      {/* Navigation */}
       <FlashcardNavigation
         onPrevious={handlePreviousCard}
         onNext={handleNextCard}
@@ -215,7 +209,6 @@ const Index = () => {
         dueDate={currentCard.dueDate}
       />
 
-      {/* Offline Notice */}
       {showOfflineNotice && (
         <OfflineNotice
           onUpgrade={handleUpgrade}

@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
@@ -13,15 +12,20 @@ export interface FlashcardProps {
   interval?: number;
   dueDate?: Date;
   onNextCard?: () => void;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
-const Flashcard = ({ question, answer, tags = [], interval, dueDate, onNextCard }: FlashcardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
+const Flashcard = ({ 
+  question, 
+  answer, 
+  tags = [], 
+  interval, 
+  dueDate, 
+  onNextCard,
+  isExpanded = false,
+  onToggleExpand 
+}: FlashcardProps) => {
   return (
     <div className="flashcard-container w-full max-w-lg mx-auto">
       <Card 
@@ -30,7 +34,7 @@ const Flashcard = ({ question, answer, tags = [], interval, dueDate, onNextCard 
           "transition-all duration-300 ease-out cursor-pointer",
           isExpanded ? "shadow-lg" : "shadow-md hover:shadow-lg"
         )} 
-        onClick={toggleExpand}
+        onClick={onToggleExpand}
       >
         <div className="relative px-6 py-8">
           {/* Top options */}
