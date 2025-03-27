@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, X, Check, MoreHorizontal, Calendar } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
+
 interface FlashcardNavigationProps {
   onPrevious: () => void;
   onNext: () => void;
@@ -12,6 +13,7 @@ interface FlashcardNavigationProps {
   interval?: number;
   dueDate?: Date;
 }
+
 const FlashcardNavigation = ({
   onPrevious,
   onNext,
@@ -20,7 +22,6 @@ const FlashcardNavigation = ({
   interval,
   dueDate
 }: FlashcardNavigationProps) => {
-  // Format the interval text
   const getIntervalText = () => {
     if (!interval) return '';
     if (interval === 1) {
@@ -36,13 +37,13 @@ const FlashcardNavigation = ({
     }
   };
 
-  // Format the due date
   const getDueDateText = () => {
     if (!dueDate) return '';
     return formatDistanceToNow(dueDate, {
       addSuffix: true
-    });
+    }).replace(/\d+\s*day(s)?/, '').trim();
   };
+
   return <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
       <div className="max-w-screen-lg mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -88,12 +89,11 @@ const FlashcardNavigation = ({
           <span className="text-gray-600 text-sm">Again</span>
         </div>
         
-        {/* Interval information */}
         {interval && dueDate && <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar size={14} className="text-gray-500" />
             <span className="text-base font-normal">Review {getDueDateText()}</span>
             <Badge variant="outline" className="bg-gray-100 text-gray-600 border-gray-200 text-[10px]">
-              {getIntervalText()}
+              {interval === 1 ? '1 day' : `${interval} days`}
             </Badge>
           </div>}
         
@@ -128,4 +128,5 @@ const FlashcardNavigation = ({
       </div>
     </div>;
 };
+
 export default FlashcardNavigation;

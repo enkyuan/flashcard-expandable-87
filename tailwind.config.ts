@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -136,6 +135,9 @@ export default {
 				'fade-out': 'fade-out 0.3s ease-in-out',
 				'slide-up': 'slide-up 0.3s ease-out',
 				'slide-down': 'slide-down 0.3s ease-out'
+			},
+			fontFamily: {
+				sans: ['Geist', 'system-ui', 'sans-serif'],
 			}
 		}
 	},
