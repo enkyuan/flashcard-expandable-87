@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Flashcard from '@/components/Flashcard';
 import FlashcardHeader from '@/components/FlashcardHeader';
@@ -138,7 +139,12 @@ const Index = () => {
         e.preventDefault();
         
         if (isCardExpanded) {
-          handleNextCard();
+          // Collapse the card first, then go to next card
+          setIsCardExpanded(false);
+          // Wait for the collapse animation to finish before moving to next card
+          setTimeout(() => {
+            handleNextCard();
+          }, 300);
         } else {
           setIsCardExpanded(true);
         }
