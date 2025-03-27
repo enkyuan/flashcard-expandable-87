@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
-import { ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
+import { ChevronDown, ChevronUp, MoreHorizontal, Clock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 
@@ -40,6 +40,23 @@ const Flashcard = ({
     }
     const years = Math.floor(interval / 365);
     return `${years} ${years === 1 ? 'year' : 'years'}`;
+  };
+
+  // Format interval for the clock display
+  const getShortIntervalDisplay = () => {
+    if (!interval) return '24 hrs';
+    
+    if (interval === 1) return '24 hrs';
+    if (interval < 7) return `${interval} days`;
+    if (interval === 7) return '1 week';
+    if (interval < 30) return `${interval} days`;
+    if (interval === 30) return '1 month';
+    if (interval < 365) {
+      const months = Math.floor(interval / 30);
+      return `${months} mo`;
+    }
+    const years = Math.floor(interval / 365);
+    return `${years} yr`;
   };
 
   return (
@@ -88,13 +105,19 @@ const Flashcard = ({
         {/* Footer */}
         <div className="px-4 py-3 bg-gray-50 flex items-center justify-between">
           {!isExpanded ? (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <ChevronDown size={16} />
-              <span>Next Side</span>
-              <Badge variant="outline" className="ml-1 text-[10px] uppercase px-2 py-0 h-5 tracking-wide bg-transparent border-gray-300 text-gray-500">
-                SPACE
-              </Badge>
-            </div>
+            <>
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <ChevronDown size={16} />
+                <span>Next Side</span>
+                <Badge variant="outline" className="ml-1 text-[10px] uppercase px-2 py-0 h-5 tracking-wide bg-transparent border-gray-300 text-gray-500">
+                  SPACE
+                </Badge>
+              </div>
+              <div className="flex items-center gap-1 text-sm text-gray-500">
+                <Clock size={14} className="text-gray-500" />
+                <span>{getShortIntervalDisplay()}</span>
+              </div>
+            </>
           ) : (
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>SRS Interval:</span>
