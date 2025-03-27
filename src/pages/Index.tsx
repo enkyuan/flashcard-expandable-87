@@ -136,20 +136,18 @@ const Index = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
         e.preventDefault();
-        setIsCardExpanded(!isCardExpanded);
+        
+        if (isCardExpanded) {
+          handleNextCard();
+        } else {
+          setIsCardExpanded(true);
+        }
       } else if (e.code === 'ArrowLeft') {
         handlePreviousCard();
       } else if (e.code === 'ArrowRight') {
         handleNextCard();
       } else if (e.code === 'Enter') {
         handleAddToReviews();
-      } else if (e.code === 'KeyF') {
-        toast({
-          title: "Review Again",
-          description: "Card has been marked for review again.",
-          duration: 3000,
-        });
-        handleNextCard();
       } else if (e.code === 'KeyX') {
         toast({
           title: "Skipped",
