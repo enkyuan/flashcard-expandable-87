@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
@@ -42,21 +41,9 @@ const Flashcard = ({
     return `${years} ${years === 1 ? 'year' : 'years'}`;
   };
 
-  // Format interval for the clock display
+  // Format interval for the clock display - always return 24 hrs
   const getShortIntervalDisplay = () => {
-    if (!interval) return '24 hrs';
-    
-    if (interval === 1) return '24 hrs';
-    if (interval < 7) return `${interval} days`;
-    if (interval === 7) return '1 week';
-    if (interval < 30) return `${interval} days`;
-    if (interval === 30) return '1 month';
-    if (interval < 365) {
-      const months = Math.floor(interval / 30);
-      return `${months} mo`;
-    }
-    const years = Math.floor(interval / 365);
-    return `${years} yr`;
+    return '24 hrs';
   };
 
   return (
