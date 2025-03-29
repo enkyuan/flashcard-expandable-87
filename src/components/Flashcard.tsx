@@ -82,10 +82,8 @@ const Flashcard = ({
                 <span>{getShortIntervalDisplay()}</span>
               </div>
             </> : <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>SRS Inal:</span>
-              <Badge variant="outline" className="ml-1 text-[10px] px-2 py-0 h-5 tracking-wide bg-gray-100 border-gray-300 text-gray-700">
-                {getIntervalDisplay()}
-              </Badge>
+              
+              
               {interval && interval > 1 && <span className="text-xs text-gray-500">(Next: {interval * 2} days)</span>}
             </div>}
         </div>
