@@ -1,11 +1,9 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ChevronDown, ChevronUp, MoreHorizontal, Clock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-
 export interface FlashcardProps {
   question: string;
   answer: string;
@@ -16,22 +14,19 @@ export interface FlashcardProps {
   isExpanded?: boolean;
   onToggleExpand?: () => void;
 }
-
-const Flashcard = ({ 
-  question, 
-  answer, 
-  tags = [], 
-  interval, 
-  dueDate, 
+const Flashcard = ({
+  question,
+  answer,
+  tags = [],
+  interval,
+  dueDate,
   onNextCard,
   isExpanded = false,
-  onToggleExpand 
+  onToggleExpand
 }: FlashcardProps) => {
-  
   // Format interval for display
   const getIntervalDisplay = () => {
     if (!interval) return '';
-    
     if (interval === 1) return '1 day';
     if (interval < 30) return `${interval} days`;
     if (interval < 365) {
@@ -46,17 +41,8 @@ const Flashcard = ({
   const getShortIntervalDisplay = () => {
     return '24 hrs';
   };
-
-  return (
-    <div className="flashcard-container w-full max-w-lg mx-auto">
-      <Card 
-        className={cn(
-          "flashcard bg-white border border-gray-200 rounded-md overflow-hidden",
-          "transition-all duration-300 ease-out cursor-pointer",
-          isExpanded ? "shadow-lg" : "shadow-md hover:shadow-lg"
-        )} 
-        onClick={onToggleExpand}
-      >
+  return <div className="flashcard-container w-full max-w-lg mx-auto">
+      <Card className={cn("flashcard bg-white border border-gray-200 rounded-md overflow-hidden", "transition-all duration-300 ease-out cursor-pointer", isExpanded ? "shadow-lg" : "shadow-md hover:shadow-lg")} onClick={onToggleExpand}>
         <div className="relative px-6 py-8">
           {/* Top options */}
           <div className="absolute top-2 right-2">
@@ -69,21 +55,12 @@ const Flashcard = ({
           </div>
 
           {/* Divider - only visible when expanded */}
-          {isExpanded && (
-            <div className="my-3">
+          {isExpanded && <div className="my-3">
               <div className="dashed-divider animate-fade-in" />
-            </div>
-          )}
+            </div>}
 
           {/* Answer - only visible when expanded */}
-          <div 
-            className={cn(
-              "flashcard-answer overflow-hidden",
-              isExpanded 
-                ? "max-h-[500px] opacity-100 animate-slide-up" 
-                : "max-h-0 opacity-0"
-            )}
-          >
+          <div className={cn("flashcard-answer overflow-hidden", isExpanded ? "max-h-[500px] opacity-100 animate-slide-up" : "max-h-0 opacity-0")}>
             <div className="pt-4 pb-2">
               <p className="text-center text-gray-700">{answer}</p>
             </div>
@@ -92,8 +69,7 @@ const Flashcard = ({
         
         {/* Footer */}
         <div className="px-4 py-3 bg-gray-50 flex items-center justify-between">
-          {!isExpanded ? (
-            <>
+          {!isExpanded ? <>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <ChevronDown size={16} />
                 <span>Next Side</span>
@@ -105,22 +81,15 @@ const Flashcard = ({
                 <Clock size={14} className="text-gray-500" />
                 <span>{getShortIntervalDisplay()}</span>
               </div>
-            </>
-          ) : (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>SRS Interval:</span>
+            </> : <div className="flex items-center gap-2 text-sm text-gray-500">
+              <span>SRS Inal:</span>
               <Badge variant="outline" className="ml-1 text-[10px] px-2 py-0 h-5 tracking-wide bg-gray-100 border-gray-300 text-gray-700">
                 {getIntervalDisplay()}
               </Badge>
-              {interval && interval > 1 && (
-                <span className="text-xs text-gray-500">(Next: {interval * 2} days)</span>
-              )}
-            </div>
-          )}
+              {interval && interval > 1 && <span className="text-xs text-gray-500">(Next: {interval * 2} days)</span>}
+            </div>}
         </div>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default Flashcard;
