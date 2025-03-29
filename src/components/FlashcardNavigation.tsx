@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +45,7 @@ const FlashcardNavigation = ({
     }).replace(/\d+\s*day(s)?/, '').trim();
   };
 
-  return <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200">
+  return <div className="fixed bottom-0 left-0 right-0 p-4 bg-white">
       <div className="max-w-screen-lg mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TooltipProvider>
