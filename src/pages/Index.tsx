@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Flashcard from '@/components/Flashcard';
 import FlashcardHeader from '@/components/FlashcardHeader';
@@ -16,62 +17,74 @@ const flashcardData: FlashcardData = {
     {
       "front": "What does COLA stand for in wage contracts?",
       "back": "Cost-of-Living Adjustment",
-      "interval": 1
+      "interval": 1,
+      "reviews": 3
     },
     {
       "front": "What economic indicator directly triggers COLA wage adjustments?",
       "back": "Inflation rates",
-      "interval": 3
+      "interval": 3,
+      "reviews": 2
     },
     {
       "front": "How do COLAs protect workers during inflationary periods?",
       "back": "By automatically increasing nominal wages to match price increases",
-      "interval": 7
+      "interval": 7,
+      "reviews": 1
     },
     {
       "front": "What immediate household expense increases when the Fed raises rates to combat inflation?",
       "back": "Mortgage interest rates",
-      "interval": 14
+      "interval": 14,
+      "reviews": 4
     },
     {
       "front": "What personal finance opportunity is lost when mortgage rates rise?",
       "back": "Affordable home purchases or refinancing options",
-      "interval": 21
+      "interval": 21,
+      "reviews": 2
     },
     {
       "front": "What trade-off exists between Fed rate hikes and consumer spending?",
       "back": "Higher rates curb inflation but reduce disposable income",
-      "interval": 30
+      "interval": 30,
+      "reviews": 3
     },
     {
       "front": "What does GDP measure in simplest terms?",
       "back": "Total value of goods/services produced in a country annually",
-      "interval": 45
+      "interval": 45,
+      "reviews": 5
     },
     {
       "front": "GDP analogy: What everyday object represents economic tracking?",
       "back": "A scoreboard tracking national economic activity",
-      "interval": 60
+      "interval": 60,
+      "reviews": 4
     },
     {
       "front": "What two key elements define GDP calculations?",
       "back": "Final goods/services produced within borders + time period (usually annual)",
-      "interval": 90
+      "interval": 90,
+      "reviews": 3
     },
     {
       "front": "First-order effect of protective tariffs on domestic industries?",
       "back": "Increased production costs for imported raw materials",
-      "interval": 120
+      "interval": 120,
+      "reviews": 2
     },
     {
       "front": "How do tariffs reduce export competitiveness?",
       "back": "Through retaliatory tariffs from trading partners",
-      "interval": 180
+      "interval": 180,
+      "reviews": 1
     },
     {
       "front": "What happens to consumer spending when tariffs raise prices?",
       "back": "Money shifts to protected sectors, starving other industries",
-      "interval": 365
+      "interval": 365,
+      "reviews": 0
     }
   ]
 };
@@ -191,6 +204,7 @@ const Index = () => {
             answer={currentCard.back}
             interval={currentCard.interval}
             dueDate={currentCard.dueDate}
+            reviews={flashcardData.cards[currentCardIndex].reviews}
             onNextCard={handleNextCard}
             isExpanded={isCardExpanded}
             onToggleExpand={() => setIsCardExpanded(!isCardExpanded)}

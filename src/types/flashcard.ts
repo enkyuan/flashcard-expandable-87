@@ -9,6 +9,7 @@ export interface Card {
   back: string;
   interval?: number; // Days until next review
   dueDate?: Date;
+  reviews?: number; // Number of times reviewed
 }
 
 export interface FlashcardData {

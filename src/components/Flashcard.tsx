@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ChevronDown, ChevronUp, MoreHorizontal, Clock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+
 export interface FlashcardProps {
   question: string;
   answer: string;
@@ -13,7 +15,9 @@ export interface FlashcardProps {
   onNextCard?: () => void;
   isExpanded?: boolean;
   onToggleExpand?: () => void;
+  reviews?: number; // Added reviews count
 }
+
 const Flashcard = ({
   question,
   answer,
@@ -22,7 +26,8 @@ const Flashcard = ({
   dueDate,
   onNextCard,
   isExpanded = false,
-  onToggleExpand
+  onToggleExpand,
+  reviews = 0 // Default to 0 if not provided
 }: FlashcardProps) => {
   // Format interval for display
   const getIntervalDisplay = () => {
@@ -41,6 +46,7 @@ const Flashcard = ({
   const getShortIntervalDisplay = () => {
     return '24 hrs';
   };
+
   return <div className="flashcard-container w-full max-w-lg mx-auto">
       <Card className={cn("flashcard bg-white border border-gray-200 rounded-md overflow-hidden", "transition-all duration-300 ease-out cursor-pointer", isExpanded ? "shadow-lg" : "shadow-md hover:shadow-lg")} onClick={onToggleExpand}>
         <div className="relative px-6 py-8">
@@ -82,12 +88,11 @@ const Flashcard = ({
                 <span>{getShortIntervalDisplay()}</span>
               </div>
             </> : <div className="flex items-center gap-2 text-sm text-gray-500">
-              
-              
-              {interval && interval > 1 && <span className="text-xs text-gray-500">(Next: {interval * 2} days)</span>}
+              <span>Reviews: {reviews}</span>
             </div>}
         </div>
       </Card>
     </div>;
 };
+
 export default Flashcard;
