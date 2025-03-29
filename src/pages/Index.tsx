@@ -1,12 +1,9 @@
-
-import React, { useState, useEffect } from 'react';
-import Flashcard from '@/components/Flashcard';
-import FlashcardHeader from '@/components/FlashcardHeader';
-import FlashcardNavigation from '@/components/FlashcardNavigation';
+import React, { useState } from 'react';
 import FlashcardSidebar from '@/components/FlashcardSidebar';
 import OfflineNotice from '@/components/OfflineNotice';
-import { toast } from '@/components/ui/use-toast';
-import { FlashcardData, Card } from '@/types/flashcard';
+import { toast } from '@/hooks/use-toast';
+import FlashcardStudyView from '@/components/FlashcardStudyView';
+import { FlashcardData } from '@/types/flashcard';
 
 const flashcardData: FlashcardData = {
   "deck": {
@@ -89,53 +86,9 @@ const flashcardData: FlashcardData = {
   ]
 };
 
-const cardsWithIntervals = flashcardData.cards.map(card => {
-  const now = new Date();
-  const dueDate = new Date();
-  dueDate.setDate(now.getDate() + (card.interval || 1));
-  return {
-    ...card,
-    dueDate
-  };
-});
-
 const Index = () => {
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showOfflineNotice, setShowOfflineNotice] = useState(true);
-  const [cardOpacity, setCardOpacity] = useState(1);
-  const [isCardExpanded, setIsCardExpanded] = useState(false);
-
-  const currentCard = cardsWithIntervals[currentCardIndex];
-
-  const handleNextCard = () => {
-    setCardOpacity(0);
-    setTimeout(() => {
-      setCurrentCardIndex((prevIndex) => (prevIndex + 1) % cardsWithIntervals.length);
-      setCardOpacity(1);
-      setIsCardExpanded(false);
-    }, 300);
-  };
-
-  const handlePreviousCard = () => {
-    setCardOpacity(0);
-    setTimeout(() => {
-      setCurrentCardIndex((prevIndex) => 
-        prevIndex === 0 ? cardsWithIntervals.length - 1 : prevIndex - 1
-      );
-      setCardOpacity(1);
-      setIsCardExpanded(false);
-    }, 300);
-  };
-
-  const handleAddToReviews = () => {
-    toast({
-      title: "Added to Reviews",
-      description: `Card "${currentCard.front}" has been added to your reviews.`,
-      duration: 3000,
-    });
-    handleNextCard();
-  };
 
   const handleUpgrade = () => {
     toast({
@@ -145,48 +98,8 @@ const Index = () => {
     });
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        
-        if (!isCardExpanded) {
-          setIsCardExpanded(true);
-        } else {
-          handleNextCard();
-        }
-      } else if (e.code === 'ArrowLeft') {
-        handlePreviousCard();
-      } else if (e.code === 'ArrowRight') {
-        handleNextCard();
-      } else if (e.code === 'Enter') {
-        handleAddToReviews();
-      } else if (e.code === 'KeyX') {
-        toast({
-          title: "Skipped",
-          description: "Card has been skipped.",
-          duration: 3000,
-        });
-        handleNextCard();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [currentCardIndex, isCardExpanded]);
-
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 relative">
-      <FlashcardHeader 
-        onOpenSidebar={() => setIsSidebarOpen(true)}
-        deckName={flashcardData.deck.title}
-        cardCount={cardsWithIntervals.length}
-        currentIndex={currentCardIndex + 1}
-      />
-
       <FlashcardSidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)}
@@ -194,31 +107,9 @@ const Index = () => {
         deckDescription={flashcardData.deck.description}
       />
 
-      <div className="pt-16 pb-24 px-4 flex items-center justify-center min-h-screen">
-        <div 
-          className="w-full max-w-lg transition-opacity duration-300"
-          style={{ opacity: cardOpacity }}
-        >
-          <Flashcard
-            question={currentCard.front}
-            answer={currentCard.back}
-            interval={currentCard.interval}
-            dueDate={currentCard.dueDate}
-            reviews={flashcardData.cards[currentCardIndex].reviews}
-            onNextCard={handleNextCard}
-            isExpanded={isCardExpanded}
-            onToggleExpand={() => setIsCardExpanded(!isCardExpanded)}
-          />
-        </div>
-      </div>
-
-      <FlashcardNavigation
-        onPrevious={handlePreviousCard}
-        onNext={handleNextCard}
-        onReview={handleAddToReviews}
-        onSkip={handleNextCard}
-        interval={currentCard.interval}
-        dueDate={currentCard.dueDate}
+      <FlashcardStudyView 
+        flashcardData={flashcardData}
+        showSidebar={() => setIsSidebarOpen(true)}
       />
 
       {showOfflineNotice && (

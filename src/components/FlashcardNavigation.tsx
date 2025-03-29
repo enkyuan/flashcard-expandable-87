@@ -45,7 +45,8 @@ const FlashcardNavigation = ({
     }).replace(/\d+\s*day(s)?/, '').trim();
   };
 
-  return <div className="fixed bottom-0 left-0 right-0 p-4 bg-white">
+  return (
+    <div className="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-md">
       <div className="max-w-screen-lg mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TooltipProvider>
@@ -90,13 +91,15 @@ const FlashcardNavigation = ({
           <span className="text-gray-600 text-sm">Again</span>
         </div>
         
-        {interval && dueDate && <div className="flex items-center gap-2 text-sm text-gray-600">
+        {interval && dueDate && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar size={14} className="text-gray-500" />
             <span className="text-base font-normal">Review {getDueDateText()}</span>
             <Badge variant="outline" className="bg-gray-100 text-gray-600 border-gray-200 text-[10px]">
               {interval === 1 ? '1 day' : `${interval} days`}
             </Badge>
-          </div>}
+          </div>
+        )}
         
         <div className="flex items-center gap-2">
           <TooltipProvider>
@@ -127,7 +130,8 @@ const FlashcardNavigation = ({
           </TooltipProvider>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default FlashcardNavigation;
